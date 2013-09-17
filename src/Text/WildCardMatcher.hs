@@ -101,10 +101,12 @@ generateParser pg bs = case ABC.parse pg bs of
 type Matcher = BS.ByteString -> Bool
 
 matchWildCardString :: BS.ByteString -> Matcher
+matchWildCardString "" "" = True
+matchWildCardString _  "" = False
 matchWildCardString wildCardString targetString = case ABC.parse parser targetString of
-    ABC.Done _ _ -> True
+    ABC.Done "" _ -> True
     ABC.Partial f -> case f "" of
-        ABC.Done _ _ -> True
+        ABC.Done "" _ -> True
         _ -> False
     _ -> False
     where
